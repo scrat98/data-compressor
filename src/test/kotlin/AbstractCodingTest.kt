@@ -1,8 +1,9 @@
-package a0
-
+import a0.NUMBER_OF_CHARS
+import commons.Coder
+import commons.Decoder
 import commons.decode
 import commons.encode
-import org.junit.jupiter.api.Assertions.assertArrayEquals
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -12,7 +13,10 @@ import java.io.File
 import java.io.FileInputStream
 import kotlin.random.Random
 
-class A0CodingTest {
+abstract class AbstractCodingTest(
+  private val encoder: Coder,
+  private val decoder: Decoder
+) {
 
   companion object {
     @JvmStatic
@@ -55,8 +59,8 @@ class A0CodingTest {
   }
 
   private fun testInputStream(input: ByteArray) {
-    val encoded = A0Coder.encode(input)
-    val decoded = A0Decoder.decode(encoded)
-    assertArrayEquals(input, decoded)
+    val encoded = encoder.encode(input)
+    val decoded = decoder.decode(encoded)
+    Assertions.assertArrayEquals(input, decoded)
   }
 }
