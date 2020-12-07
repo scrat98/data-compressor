@@ -3,7 +3,7 @@ package a0
 import java.io.Closeable
 import java.io.OutputStream
 
-class BitOutputStream(
+internal class BitOutputStream(
   private val output: OutputStream
 ) : Closeable {
 

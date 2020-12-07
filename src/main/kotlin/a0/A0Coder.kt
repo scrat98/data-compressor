@@ -6,19 +6,13 @@ import java.io.InputStream
 import java.io.OutputStream
 
 object A0Coder : Coder {
-
   override fun encode(input: InputStream, output: OutputStream) {
-    val writer = A0CoderWriter(output)
-    while (true) {
-      val byte = input.read()
-      if (byte == -1) break
-      writer.write(byte)
-    }
-    writer.close()
+    A0CoderWriter(input, output).writeEncoded()
   }
 }
 
 private class A0CoderWriter(
+  private val input: InputStream,
   private val output: OutputStream
 ) : Closeable {
 
@@ -32,7 +26,16 @@ private class A0CoderWriter(
 
   private var bitsToFollow = 0
 
-  fun write(char: Int) {
+  fun writeEncoded() {
+    while (true) {
+      val byte = input.read()
+      if (byte == -1) break
+      write(byte)
+    }
+    close()
+  }
+
+  private fun write(char: Int) {
     val charIndex = frequencyModel.charToIndex(char)
     encodeNext(charIndex)
     frequencyModel.update(charIndex)
