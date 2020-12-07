@@ -1,7 +1,7 @@
 package a0
 
 import commons.Decoder
-import java.io.Closeable
+import commons.DecoderWriter
 import java.io.InputStream
 import java.io.OutputStream
 
@@ -14,7 +14,7 @@ object A0Decoder : Decoder {
 private class A0DecoderWriter(
   private val input: InputStream,
   private val output: OutputStream
-) : Closeable {
+) : DecoderWriter {
 
   private val frequencyModel = A0FrequencyModel()
 
@@ -34,7 +34,7 @@ private class A0DecoderWriter(
     codeValue = 2 * codeValue + bitInputStream.read()
   }
 
-  fun writeDecoded() {
+  override fun writeDecoded() {
     while (true) {
       val symbolIndex = nextSymbolIndex()
       if (symbolIndex == EOF_SYMBOL) break

@@ -1,7 +1,7 @@
 package a0
 
 import commons.Coder
-import java.io.Closeable
+import commons.CoderWriter
 import java.io.InputStream
 import java.io.OutputStream
 
@@ -14,7 +14,7 @@ object A0Coder : Coder {
 private class A0CoderWriter(
   private val input: InputStream,
   private val output: OutputStream
-) : Closeable {
+) : CoderWriter {
 
   private val frequencyModel = A0FrequencyModel()
 
@@ -26,7 +26,7 @@ private class A0CoderWriter(
 
   private var bitsToFollow = 0
 
-  fun writeEncoded() {
+  override fun writeEncoded() {
     while (true) {
       val byte = input.read()
       if (byte == -1) break
