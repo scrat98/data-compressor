@@ -46,7 +46,7 @@ class A0CodingTest {
 
   @RepeatedTest(5)
   fun `test random input with all possible chars`() {
-    val input = ByteArray(NUMBER_OF_CHARS + 10_000)
+    val input = ByteArray(NUMBER_OF_CHARS + 100_000)
     (0..NUMBER_OF_CHARS).forEach {
       input[it] = it.toByte()
     }
