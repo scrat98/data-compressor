@@ -3,7 +3,7 @@ import commons.Coder
 import commons.Decoder
 import commons.decode
 import commons.encode
-import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertArrayEquals
 import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -61,6 +61,6 @@ abstract class AbstractCodingTest(
   private fun testInputStream(input: ByteArray) {
     val encoded = encoder.encode(input)
     val decoded = decoder.decode(encoded)
-    Assertions.assertArrayEquals(input, decoded)
+    assertArrayEquals(input, decoded)
   }
 }
