@@ -76,6 +76,7 @@ private class A0CoderWriter(
   }
 
   override fun close() {
+    input.close()
     writeEOFAndFlush()
     bitOutputStream.close()
   }

@@ -86,5 +86,6 @@ private class A0DecoderWriter(
 
   override fun close() {
     bitInputStream.close()
+    output.close()
   }
 }
