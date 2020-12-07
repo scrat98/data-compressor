@@ -2,6 +2,7 @@ package a0
 
 import commons.Coder
 import commons.CoderWriter
+import commons.forEachByte
 import java.io.InputStream
 import java.io.OutputStream
 
@@ -27,11 +28,7 @@ private class A0CoderWriter(
   private var bitsToFollow = 0
 
   override fun writeEncoded() {
-    while (true) {
-      val byte = input.read()
-      if (byte == -1) break
-      write(byte)
-    }
+    input.forEachByte { byte -> write(byte) }
     close()
   }
 
