@@ -28,7 +28,7 @@ private class A0CoderWriter(
   private var bitsToFollow = 0
 
   override fun writeEncoded() {
-    input.forEachByte { byte -> write(byte) }
+    input.forEachByte { write(it) }
     close()
   }
 
