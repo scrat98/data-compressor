@@ -17,7 +17,7 @@ private class RLECoderWriter(
   private val output: OutputStream
 ) : CoderWriter {
 
-  private val MAX_SEQUENCE_SIZE = 255
+  private val MAX_SEQUENCE_SIZE = 255 + 2
 
   private var currentSequenceSize = 0
 
