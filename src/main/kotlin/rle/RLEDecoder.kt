@@ -16,21 +16,20 @@ private class RLEDecoderWriter(
   private val output: OutputStream
 ) : DecoderWriter {
 
+  private var previousByte = -1
+
   override fun writeDecoded() {
     while (true) {
       val byte = input.read()
       if (byte == -1) break
-      val sequenceLength = byte.toByte().toInt()
-      if (sequenceLength < 0) {
-        repeat(-sequenceLength) {
-          output.write(input.read())
-        }
-      } else {
-        val repeatedByte = input.read()
-        repeat(sequenceLength) {
-          output.write(repeatedByte)
+      output.write(byte)
+      if (byte == previousByte) {
+        val repeatedSequenceSize = input.read()
+        repeat(repeatedSequenceSize) {
+          output.write(previousByte)
         }
       }
+      previousByte = byte
     }
     close()
   }

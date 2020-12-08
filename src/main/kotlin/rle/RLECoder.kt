@@ -17,68 +17,37 @@ private class RLECoderWriter(
   private val output: OutputStream
 ) : CoderWriter {
 
-  private val maxSequenceSize = Byte.MAX_VALUE.toInt()
-
-  private var currentSequence = ByteArray(maxSequenceSize)
+  private val MAX_SEQUENCE_SIZE = 255
 
   private var currentSequenceSize = 0
 
-  private val previousByte
-    get() = currentSequence[currentSequenceSize - 1]
-
-  private val currentSequenceIsRepeated
-    get() = currentSequence[0] == currentSequence[1]
+  private var previousByte = -1
 
   override fun writeEncoded() {
-    input.forEachByte { encodeNext(it.toByte()) }
+    input.forEachByte { encodeNext(it) }
     close()
   }
 
-  private fun encodeNext(byte: Byte) {
-    if (currentSequenceSize == 0 || currentSequenceSize == 1) {
-      currentSequence[currentSequenceSize++] = byte
-      return
-    }
-
-    if (previousByte == byte) {
-      if (currentSequenceIsRepeated) {
-        // just extend existed repeated sequence
-        currentSequence[currentSequenceSize++] = byte
-      } else {
-        // found the repeated sequence
-        currentSequenceSize--
-        flushCurrentSequence()
-        currentSequenceSize = 2
-        currentSequence[0] = byte
-        currentSequence[1] = byte
-      }
+  private fun encodeNext(byte: Int) {
+    if (byte == previousByte) {
+      currentSequenceSize++
     } else {
-      if (currentSequenceIsRepeated) {
-        // end of repeated sequence
-        flushCurrentSequence()
-        currentSequence[currentSequenceSize++] = byte
-      } else {
-        // just extend existed non-repeated sequence
-        currentSequence[currentSequenceSize++] = byte
-      }
-    }
-
-    if (currentSequenceSize == maxSequenceSize) {
       flushCurrentSequence()
+      output.write(byte)
+      currentSequenceSize = 1
     }
+    if (currentSequenceSize == MAX_SEQUENCE_SIZE) {
+      flushCurrentSequence()
+      currentSequenceSize = 1
+    }
+    previousByte = byte
   }
 
   private fun flushCurrentSequence() {
-    if (currentSequenceSize == 0) return
-    if (currentSequenceIsRepeated) {
-      val byteOfLength = currentSequenceSize
-      val repeatedByte = previousByte
-      output.write(byteArrayOf(byteOfLength.toByte(), repeatedByte), 0, 2)
-    } else {
-      val byteOfLength = -currentSequenceSize
-      output.write(byteArrayOf(byteOfLength.toByte()), 0, 1)
-      output.write(currentSequence, 0, currentSequenceSize)
-    }
+    if (currentSequenceSize < 2) return
+    val repeatedByte = previousByte.toByte()
+    val repeatedSequenceSize = (currentSequenceSize - 2).toByte()
+    output.write(byteArrayOf(repeatedByte, repeatedSequenceSize), 0, 2)
     currentSequenceSize = 0
   }
 
