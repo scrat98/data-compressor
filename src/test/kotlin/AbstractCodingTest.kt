@@ -3,14 +3,10 @@ import commons.Coder
 import commons.Decoder
 import commons.decode
 import commons.encode
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertArrayEquals
-import org.junit.jupiter.api.RepeatedTest
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.Arguments
-import org.junit.jupiter.params.provider.MethodSource
 import java.io.File
-import java.io.FileInputStream
+import java.util.stream.Stream
 import kotlin.random.Random
 
 abstract class AbstractCodingTest(
@@ -18,24 +14,32 @@ abstract class AbstractCodingTest(
   private val decoder: Decoder
 ) {
 
-  companion object {
-    @JvmStatic
-    fun calgaryFiles(): List<Arguments> {
-      val calgaryFolderResource = Thread.currentThread().contextClassLoader.getResource("calgary")
-      val calgaryFolder = File(calgaryFolderResource.file)
-      return calgaryFolder.listFiles().map {
-        Arguments.of(it.inputStream(), it.name)
+  @TestFactory
+  fun `ensure that all data sets from 'Corpora group' can be encoded and decoded`(): Stream<DynamicContainer> {
+    return getAllCorpusData().map { (corporaGroupName, dataSets) ->
+      val dataSetsContainers = dataSets.map { (dataSetName, files) ->
+        val tests = files.map {
+          DynamicTest.dynamicTest(it.name) { testInputStream(it.inputStream().readBytes()) }
+        }
+        DynamicContainer.dynamicContainer(dataSetName, tests)
       }
-    }
+      DynamicContainer.dynamicContainer(corporaGroupName, dataSetsContainers)
+    }.stream()
   }
 
-  @ParameterizedTest(name = "{1}")
-  @MethodSource("calgaryFiles")
-  fun `ensure that all files from calgary corpus can encoded and decoded`(
-    input: FileInputStream,
-    fileName: String
-  ) {
-    testInputStream(input.readBytes())
+  private fun getAllCorpusData(): Map<String, Map<String, List<File>>> {
+    val corpusDataFolderResource =
+        Thread.currentThread().contextClassLoader.getResource("corpora-sets")
+    val corpusDataFolder = File(corpusDataFolderResource.file)
+    return corpusDataFolder.listFiles()
+        .filter { it.isDirectory }
+        .associate {
+          val corporaGroupName = it.name
+          val corporaDataSets = it.listFiles()
+              .filter { it.isDirectory }
+              .associate { it.name to it.listFiles().toList() }
+          corporaGroupName to corporaDataSets
+        }
   }
 
   @Test
