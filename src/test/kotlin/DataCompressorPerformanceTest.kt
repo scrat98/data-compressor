@@ -111,13 +111,13 @@ class DataCompressorPerformanceTest {
       table {
         th {
           item { "Type" }; item { "Total compressed(bytes)" }; item { "Total bits per byte" }
-          item { "Total elapsed time(ms)" }; item { "Size/time ratio" }
+          item { "Total elapsed time(ms)" }; item { "(raw - compressed)/elapsed time ratio" }
         }
         totalResults.forEach { (chainName, totalResult) ->
           tr {
             item { chainName }; item { "${totalResult.compressedSize}" }
             item { "%.3f".format(totalResult.bitsPerByte) }; item { "${totalResult.elapsedTimeMillis}" }
-            item { "${totalResult.compressedSize / totalResult.elapsedTimeMillis}" }
+            item { "${(totalResult.rawSize - totalResult.compressedSize) / totalResult.elapsedTimeMillis}" }
           }
         }
       }

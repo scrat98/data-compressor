@@ -138,10 +138,10 @@ For tests we are going to use [Calgary group dataset](http://www.data-compressio
 | total | 3251493 | 978063 | 48.453 | 2929 |
 
 ## Overall result
-| Type | Total compressed(bytes) | Total bits per byte | Total elapsed time(ms) | Size/time ratio |
+| Type | Total compressed(bytes) | Total bits per byte | Total elapsed time(ms) | (raw - compressed)/elapsed time ratio |
 | ----------- | ----------- | ----------- | ----------- | ----------- |
-| A0 | 1779909 | 88.181 | 2800 | 635 |
-| BWT <-> MTF <-> A0 | 1013852 | 49.993 | 5040 | 201 |
-| RLE <-> BWT <-> MTF <-> A0 | 1013463 | 50.210 | 2465 | 411 |
-| BWT <-> MTF <-> RLE <-> A0 | 977393 | 48.297 | 5173 | 188 |
-| RLE <-> BWT <-> MTF <-> RLE <-> A0 | 978063 | 48.453 | 2929 | 333 |
+| A0 | 1779909 | 88.181 | 5007 | 293 |
+| BWT <-> MTF <-> A0 | 1013852 | 49.993 | 20208 | 110 |
+| RLE <-> BWT <-> MTF <-> A0 | 1013463 | 50.210 | 13301 | 168 |
+| BWT <-> MTF <-> RLE <-> A0 | 977393 | 48.297 | 9433 | 241 |
+| RLE <-> BWT <-> MTF <-> RLE <-> A0 | 978063 | 48.453 | 4565 | 498 |
