@@ -78,8 +78,22 @@ Compile with maven ``mvn clean package`` or download from [github](https://githu
 For tests we are going to use [Calgary group dataset](http://www.data-compression.info/Corpora/CalgaryCorpus/)
 
 ## Entropy for files
-|  |
-|
+| File name   | H(X)        | H(X \| X)   | H(X \| XX) | 
+| ----------- | ----------- | ----------- | ----------- |
+| bib         | 5.2007      | 3.3641      | 2.3075      |
+| book1       | 4.5271      | 3.5845      | 2.8141      |
+| book2       | 4.7926      | 3.7452      | 2.7357      |
+| geo         | 5.6464      | 4.2642      | 3.4578      |
+| news        | 5.1896      | 4.0919      | 2.9228      |
+| obj1        | 5.9482      | 3.4636      | 1.4005      |
+| obj2        | 6.2604      | 3.8704      | 2.2654      |
+| paper1      | 4.9830      | 3.6461      | 2.3318      |
+| paper2      | 4.6014      | 3.5224      | 2.5136      |
+| pic         | 1.2102      | 0.8237      | 0.7052      |
+| progc       | 5.1990      | 3.6034      | 2.1340      |
+| progl       | 4.7701      | 3.2116      | 2.0435      |
+| progp       | 4.8688      | 3.1875      | 1.7551      |
+| trans       | 5.5328      | 3.3548      | 1.9305      |
 
 ## A0
 | File name | Raw size(bytes) | Compressed size(bytes) | Bits per byte | Elapsed time(ms) |
