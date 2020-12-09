@@ -29,6 +29,7 @@ private class MTFDecoderWriter(
       indexToByte[0] = byte
       output.write(byte)
     }
+    close()
   }
 
   override fun close() {
