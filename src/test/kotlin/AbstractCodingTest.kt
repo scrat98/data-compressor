@@ -61,5 +61,6 @@ abstract class AbstractCodingTest(
     val encoded = compressor.encode(input)
     val decoded = compressor.decode(encoded)
     assertArrayEquals(input, decoded)
+    println("RawSize: ${input.size}. CompressedSize: ${encoded.size}. Compressed ration: ${input.size.toDouble() / encoded.size}")
   }
 }
