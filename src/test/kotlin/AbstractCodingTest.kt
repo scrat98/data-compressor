@@ -1,4 +1,7 @@
-import commons.*
+import commons.Compressor
+import commons.NUMBER_OF_CHARS
+import commons.decode
+import commons.encode
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertArrayEquals
 import java.io.File
@@ -20,21 +23,6 @@ abstract class AbstractCodingTest(
       }
       DynamicContainer.dynamicContainer(corporaGroupName, dataSetsContainers)
     }.stream()
-  }
-
-  private fun getAllCorpusData(): Map<String, Map<String, List<File>>> {
-    val corpusDataFolderResource =
-        Thread.currentThread().contextClassLoader.getResource("corpora-sets")
-    val corpusDataFolder = File(corpusDataFolderResource.file)
-    return corpusDataFolder.listFiles()
-        .filter { it.isDirectory }
-        .associate {
-          val corporaGroupName = it.name
-          val corporaDataSets = it.listFiles()
-              .filter { it.isDirectory }
-              .associate { it.name to it.listFiles().toList() }
-          corporaGroupName to corporaDataSets
-        }
   }
 
   @Test
@@ -61,6 +49,21 @@ abstract class AbstractCodingTest(
     val encoded = compressor.encode(input)
     val decoded = compressor.decode(encoded)
     assertArrayEquals(input, decoded)
-    println("RawSize: ${input.size}. CompressedSize: ${encoded.size}. Compressed ration: ${input.size.toDouble() / encoded.size}")
+    println("RawSize: ${input.size}. CompressedSize: ${encoded.size}. Compressed ratio: ${input.size.toDouble() / encoded.size}")
   }
+}
+
+internal fun getAllCorpusData(): Map<String, Map<String, List<File>>> {
+  val corpusDataFolderResource =
+      Thread.currentThread().contextClassLoader.getResource("corpora-sets")
+  val corpusDataFolder = File(corpusDataFolderResource.file)
+  return corpusDataFolder.listFiles()
+      .filter { it.isDirectory }
+      .associate {
+        val corporaGroupName = it.name
+        val corporaDataSets = it.listFiles()
+            .filter { it.isDirectory }
+            .associate { it.name to it.listFiles().toList() }
+        corporaGroupName to corporaDataSets
+      }
 }
