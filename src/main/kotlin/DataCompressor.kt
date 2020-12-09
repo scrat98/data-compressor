@@ -52,5 +52,6 @@ object DataCompressor : Compressor {
 
   private fun createTempFile(): File {
     return File.createTempFile("~data-compressor-${System.currentTimeMillis()}", ".tmp")
+        .also { it.deleteOnExit() }
   }
 }
