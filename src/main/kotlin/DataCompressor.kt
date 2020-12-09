@@ -34,7 +34,8 @@ object DataCompressor : Compressor {
 
     chain.dropLast(1).forEach {
       val tempOutputStream = currentOutputTempFile.outputStream().buffered()
-      it.process(currentInputStream, tempOutputStream)
+      it.also { println("Processing ${it::class.simpleName}...") }
+          .process(currentInputStream, tempOutputStream)
 
       if (currentOutputTempFile == tempFile1) {
         currentInputStream = tempFile1.inputStream().buffered()
@@ -44,7 +45,9 @@ object DataCompressor : Compressor {
         currentOutputTempFile = tempFile1
       }
     }
-    chain.last().process(currentInputStream, output)
+    chain.last()
+        .also { println("Processing ${it::class.simpleName}...") }
+        .process(currentInputStream, output)
 
     tempFile1.delete()
     tempFile2.delete()
