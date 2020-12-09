@@ -24,8 +24,6 @@ private class BWTDecoderWriter(
 
   private val count = Array<Int>(NUMBER_OF_CHARS + 1) { 0 }
 
-  private val runningTotal = Array<Int>(NUMBER_OF_CHARS + 1) { 0 }
-
   private var bufferLength = -1
 
   private var firstIndex = -1
@@ -54,16 +52,15 @@ private class BWTDecoderWriter(
     }
     var sum = 0
     (0..NUMBER_OF_CHARS).forEach {
-      runningTotal[it] = sum
       sum += count[it]
-      count[it] = 0
+      count[it] = sum - count[it]
     }
   }
 
   private fun calculateBWTReverseVector() {
     (0 until bufferLength).forEach {
       val byteIndex = getIndexForByte(it)
-      BWTReverseVector[count[byteIndex] + runningTotal[byteIndex]] = it
+      BWTReverseVector[count[byteIndex]] = it
       count[byteIndex]++
     }
   }
