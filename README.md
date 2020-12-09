@@ -1,19 +1,58 @@
 # How to use
 
-Compile with maven ``mvn clean package`` or download from <> and execute the jar  
+Compile with maven ``mvn clean package`` or download from [github](https://github.com/scrat98/data-compressor/releases) and execute the jar  
 ``java -jar data-compressor.jar <encode | decode> <input file> <output file>``
 
 # Algorithm explanation
 
-RLE <-> BWT <-> MTF <-> RLE <-> A0
+Сначала был реализован алгоритм Адаптивного Арифметического кодирования. Затем "компрессор" улучшался. В итоге, вся цепочка компрессора состоит из: ``RLE <-> BWT <-> MTF <-> RLE <-> A0``.
+Стоит заметить, что файл не выгружается целиком в память(во избежание проблем) и каждый следующий алгоритм читает временный файл предыдущего алгоритма. Т.е. данный архиватор является полностью адаптивным.  
+С итоговым сравнением эффективности разных цепочек алгоритмов вы можете ознакомиться [здесь](#overall-result). Ниже будут описаны краткие детали каждого из алгоритмов
 
-## RLE
+## Arithmetic coding
+Энтропийный алгоритм сжатия, который основан на частоте символов. За основу была взята статья Witten'а. Данный метод основан на целочисленной реализации. 
+Также в данной реализации не передается размер файла, а вводиться дополнительный символ окончания потока(EOF), т.е. расширяется алфавит и число интервалов, на которые делится отрезок.
+Тем самым делая алгоритм адаптивным. Частота символов вычисляется динамически по их приходу и увеличивает соответствующий счетчик.
+
+Источники:
+- Witten, I.H., Neal, R., and Cleary, J.G., (1987b) “Arithmetic coding for data compression,” Communications of the Association for Computing Machinery,30 (6) 520-540, June.
+- https://neerc.ifmo.ru/wiki/index.php?title=%D0%90%D1%80%D0%B8%D1%84%D0%BC%D0%B5%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%BE%D0%B5_%D0%BA%D0%BE%D0%B4%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5
+- https://habr.com/ru/post/130531/
 
 ## BWT
 
+Источники:
+- https://www.youtube.com/watch?v=4n7NPk5lwbI
+- https://www.quora.com/Algorithms/How-can-I-optimize-burrows-wheeler-transform-and-inverse-transform-to-work-in-O-n-time-O-n-space
+- https://neerc.ifmo.ru/wiki/index.php?title=%D0%9F%D1%80%D0%B5%D0%BE%D0%B1%D1%80%D0%B0%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5_%D0%91%D0%B0%D1%80%D1%80%D0%BE%D1%83%D0%B7%D0%B0-%D0%A3%D0%B8%D0%BB%D0%B5%D1%80%D0%B0
+- https://compression.ru/book/pdf/compression_methods_part1_5-7.pdf
+- http://mf.grsu.by/UchProc/livak/po/comprsite/theory_bwt.html
+
 ## MTF
 
-## Arithmetic coding
+Источники:
+- http://neerc.ifmo.ru/wiki/index.php?title=%D0%9F%D1%80%D0%B5%D0%BE%D0%B1%D1%80%D0%B0%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5_MTF
+
+## RLE
+Поточный алгоритм сжатия. Можно сказать, является наивной реализацией алгоритмов семейства LZ*. Он позволяет сжимать повторяющиеся серии символов. Под максимальную длину серии был взят размер 1 байта.
+Было рассмотрено два варианта реализации:
+1) В первом байте хранить длину и если она отрицательная, то значит следующие n символов не являются серией и мы их просто считываем, если положительная, то будет следовать n повторений следующего символа.
+Была сделана маленькая оптимизация, что длины повторяющихся цепочек хранились от 2 до 129, так как минимальная цепочка имеет длину 2.  
+``ABCABCABCDDDFFFFFF -> -9ABCABCABC3D6F``
+
+2) Мы пишем символы и если встретили повторяющиеся, то после них пишем длину еще повторений этих же символов. ``ABCAAA -> ABCAA1``
+Это плохо работает только со строками, где много серий длины два, тогда мы каждый раз увеличиваем длину файла на 1 байт(``AA -> AA0``), но это нивелируется следующими алгоритмами BWT и MTF.  
+
+Второй вариант реализации оказался более эффективным.
+
+Этот алгоритм применяется до BWT, чтобы сделать более быструю сортировку впоследствии. И после MTF, так как образуется много нулей после него.
+
+Источники:
+- https://habr.com/ru/post/141827/
+- https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D0%B4%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5_%D0%B4%D0%BB%D0%B8%D0%BD_%D1%81%D0%B5%D1%80%D0%B8%D0%B9
+
+## TODO
+Заменить алгоритм RLE на LZW/LZ77, что даст прирост в качестве сжатия/
 
 # Performance test results
 For tests we are going to use [Calgary group dataset](http://www.data-compression.info/Corpora/CalgaryCorpus/)
