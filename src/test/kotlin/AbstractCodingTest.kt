@@ -6,8 +6,7 @@ import java.util.stream.Stream
 import kotlin.random.Random
 
 abstract class AbstractCodingTest(
-  private val encoder: Coder,
-  private val decoder: Decoder
+  private val compressor: Compressor,
 ) {
 
   @TestFactory
@@ -59,8 +58,8 @@ abstract class AbstractCodingTest(
   }
 
   private fun testInputStream(input: ByteArray) {
-    val encoded = encoder.encode(input)
-    val decoded = decoder.decode(encoded)
+    val encoded = compressor.encode(input)
+    val decoded = compressor.decode(encoded)
     assertArrayEquals(input, decoded)
   }
 }

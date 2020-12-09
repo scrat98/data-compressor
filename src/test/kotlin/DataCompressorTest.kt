@@ -1,0 +1,1 @@
+class DataCompressorTest : AbstractCodingTest(DataCompressor)

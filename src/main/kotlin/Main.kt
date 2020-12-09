@@ -1,5 +1,3 @@
-import a0.A0Coder
-import a0.A0Decoder
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import kotlin.system.exitProcess
@@ -12,8 +10,8 @@ fun main(args: Array<String>) {
   val input = FileInputStream(args[1]).buffered()
   val output = FileOutputStream(args[2]).buffered()
   when (type) {
-    "encode" -> A0Coder.encode(input, output)
-    "decode" -> A0Decoder.decode(input, output)
+    "encode" -> DataCompressor.encode(input, output)
+    "decode" -> DataCompressor.decode(input, output)
     else -> invalidArgsError()
   }
 }

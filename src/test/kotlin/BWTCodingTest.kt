@@ -1,4 +1,3 @@
-import bwt.BWTCoder
-import bwt.BWTDecoder
+import bwt.BWTCompressor
 
-class BWTCodingTest : AbstractCodingTest(BWTCoder, BWTDecoder)
+class BWTCodingTest : AbstractCodingTest(BWTCompressor)

@@ -1,4 +1,3 @@
-import mtf.MTFCoder
-import mtf.MTFDecoder
+import mtf.MTFCompressor
 
-class MTFCodingTest : AbstractCodingTest(MTFCoder, MTFDecoder)
+class MTFCodingTest : AbstractCodingTest(MTFCompressor)

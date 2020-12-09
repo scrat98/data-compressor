@@ -1,4 +1,3 @@
-import rle.RLECoder
-import rle.RLEDecoder
+import rle.RLECompressor
 
-class RLECodingTest : AbstractCodingTest(RLECoder, RLEDecoder)
+class RLECodingTest : AbstractCodingTest(RLECompressor)
