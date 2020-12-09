@@ -2,6 +2,8 @@ package mtf
 
 import commons.Coder
 import commons.CoderWriter
+import commons.NUMBER_OF_CHARS
+import commons.forEachByte
 import java.io.InputStream
 import java.io.OutputStream
 
@@ -15,11 +17,23 @@ private class MTFCoderWriter(
   private val input: InputStream,
   private val output: OutputStream
 ) : CoderWriter {
+
+  private val indexToByte = Array<Int>(NUMBER_OF_CHARS) { it }
+
   override fun writeEncoded() {
-    TODO("Not yet implemented")
+    input.forEachByte { byte ->
+      val index = indexToByte.indexOfFirst { it == byte }
+      for (i in index downTo 1) {
+        indexToByte[i] = indexToByte[i - 1]
+      }
+      indexToByte[0] = byte
+      output.write(index)
+    }
+    close()
   }
 
   override fun close() {
-    TODO("Not yet implemented")
+    input.close()
+    output.close()
   }
 }

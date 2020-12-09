@@ -1,6 +1,6 @@
 package a0
 
-internal const val NUMBER_OF_CHARS = 256
+import commons.NUMBER_OF_CHARS
 
 internal const val EOF_SYMBOL = NUMBER_OF_CHARS + 1
 

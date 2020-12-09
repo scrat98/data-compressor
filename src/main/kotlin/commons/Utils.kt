@@ -3,7 +3,9 @@ package commons
 import java.io.InputStream
 import java.io.OutputStream
 
-fun InputStream.forEachByte(action: (byte: Int) -> Unit) {
+internal const val NUMBER_OF_CHARS = 256
+
+internal fun InputStream.forEachByte(action: (byte: Int) -> Unit) {
   while (true) {
     val byte = this.read()
     if (byte == -1) break
@@ -11,7 +13,7 @@ fun InputStream.forEachByte(action: (byte: Int) -> Unit) {
   }
 }
 
-fun InputStream.read4BytesAsInt(): Int {
+internal fun InputStream.read4BytesAsInt(): Int {
   val bytes = (1..4).map { this.read() }
   if (bytes[0] == -1) return -1
   return (
@@ -22,7 +24,7 @@ fun InputStream.read4BytesAsInt(): Int {
       )
 }
 
-fun OutputStream.writeIntAs4Bytes(number: Int) {
+internal fun OutputStream.writeIntAs4Bytes(number: Int) {
   val bytes = byteArrayOf(
       (number shr 24 and 0xff).toByte(),
       (number shr 16 and 0xff).toByte(),

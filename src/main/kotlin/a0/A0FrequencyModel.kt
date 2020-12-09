@@ -1,5 +1,7 @@
 package a0
 
+import commons.NUMBER_OF_CHARS
+
 internal class A0FrequencyModel {
 
   private val charToIndex = Array<Int>(NUMBER_OF_CHARS) { 0 }

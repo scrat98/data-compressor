@@ -1,8 +1,4 @@
-import a0.NUMBER_OF_CHARS
-import commons.Coder
-import commons.Decoder
-import commons.decode
-import commons.encode
+import commons.*
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertArrayEquals
 import java.io.File

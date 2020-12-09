@@ -2,6 +2,7 @@ package bwt
 
 import commons.Decoder
 import commons.DecoderWriter
+import commons.NUMBER_OF_CHARS
 import commons.read4BytesAsInt
 import java.io.InputStream
 import java.io.OutputStream

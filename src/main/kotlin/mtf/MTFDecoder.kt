@@ -2,6 +2,8 @@ package mtf
 
 import commons.Decoder
 import commons.DecoderWriter
+import commons.NUMBER_OF_CHARS
+import commons.forEachByte
 import java.io.InputStream
 import java.io.OutputStream
 
@@ -15,11 +17,22 @@ private class MTFDecoderWriter(
   private val input: InputStream,
   private val output: OutputStream
 ) : DecoderWriter {
+
+  private val indexToByte = Array<Int>(NUMBER_OF_CHARS) { it }
+
   override fun writeDecoded() {
-    TODO("Not yet implemented")
+    input.forEachByte { index ->
+      val byte = indexToByte[index]
+      for (i in index downTo 1) {
+        indexToByte[i] = indexToByte[i - 1]
+      }
+      indexToByte[0] = byte
+      output.write(byte)
+    }
   }
 
   override fun close() {
-    TODO("Not yet implemented")
+    input.close()
+    output.close()
   }
 }
