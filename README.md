@@ -30,7 +30,7 @@ Compile with maven ``mvn clean package`` or download from [github](https://githu
 
 *Кодирование*:  
 В данной реализации добавляется искусственно дополнительный символ конца строки(EOF), который является лексикографически большим любого символа.
-Это позволяет использовать префиксную сортировку, основанную на индексах. В данной реализации использована стандартная сортировка TeamSort в Java, которая работает в среднем за O(n), а в худшем за O(n*log n).  
+Это позволяет использовать префиксную сортировку, основанную на индексах. В данной реализации использована стандартная сортировка TimSort в Java, которая работает в среднем за O(n), а в худшем за O(n*log n).  
 
 Таким образом закодированная строка выглядит следующим образом ``bytes_size | [data] | first_index | eof_index``. 
 Где byteSize - размер блока данных, firstIndex - это номер исходной строки, eofIndex - индекс символа конца строки. 
@@ -72,7 +72,7 @@ Compile with maven ``mvn clean package`` or download from [github](https://githu
 - https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D0%B4%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5_%D0%B4%D0%BB%D0%B8%D0%BD_%D1%81%D0%B5%D1%80%D0%B8%D0%B9
 
 ## TODO
-Заменить алгоритм RLE на LZW/LZ77, что даст прирост в качестве сжатия/
+Заменить алгоритм RLE на LZW/LZ77, что даст прирост в качестве сжатия
 
 # Performance test results
 For tests we are going to use [Calgary group dataset](http://www.data-compression.info/Corpora/CalgaryCorpus/)
