@@ -9,15 +9,23 @@ import java.io.OutputStream
 
 object DataCompressor : Compressor {
 
-  private val compressorChain =
+  private val DEFAULT_COMPRESSOR_CHAIN =
       listOf(RLECompressor, BWTCompressor, MTFCompressor, RLECompressor, A0Compressor)
 
   override fun encode(input: InputStream, output: OutputStream) {
-    processChain(compressorChain, input, output, Compressor::encode)
+    encode(DEFAULT_COMPRESSOR_CHAIN, input, output)
   }
 
   override fun decode(input: InputStream, output: OutputStream) {
-    processChain(compressorChain.reversed(), input, output, Compressor::decode)
+    decode(DEFAULT_COMPRESSOR_CHAIN, input, output)
+  }
+
+  internal fun encode(chain: List<Compressor>, input: InputStream, output: OutputStream) {
+    processChain(chain, input, output, Compressor::encode)
+  }
+
+  internal fun decode(chain: List<Compressor>, input: InputStream, output: OutputStream) {
+    processChain(chain.reversed(), input, output, Compressor::decode)
   }
 
   private fun processChain(
