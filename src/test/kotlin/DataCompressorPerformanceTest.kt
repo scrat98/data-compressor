@@ -30,7 +30,7 @@ class DataCompressorPerformanceTest {
 
   private val calgaryFilesData = getAllCorpusData()
       .getValue("calgary")
-      .getValue("large")
+      .getValue("standard")
       .map { it.name to it.readBytes() }
 
   fun start() {
