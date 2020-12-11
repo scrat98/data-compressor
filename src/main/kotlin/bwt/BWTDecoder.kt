@@ -3,7 +3,7 @@ package bwt
 import commons.Decoder
 import commons.DecoderWriter
 import commons.NUMBER_OF_CHARS
-import commons.read4BytesAsInt
+import commons.toInt
 import java.io.InputStream
 import java.io.OutputStream
 
@@ -18,7 +18,7 @@ private class BWTDecoderWriter(
   private val output: OutputStream
 ) : DecoderWriter {
 
-  private val buffer = ByteArray(BLOCK_SIZE + 1)
+  private val buffer = ByteArray(BLOCK_SIZE + 1 + 2 * Int.SIZE_BYTES)
 
   private val BWTReverseVector = Array<Int>(BLOCK_SIZE + 1) { 0 }
 
@@ -32,17 +32,19 @@ private class BWTDecoderWriter(
 
   override fun writeDecoded() {
     while (true) {
-      bufferLength = input.read4BytesAsInt()
+      bufferLength = input.read(buffer)
       if (bufferLength == -1) break
-      input.read(buffer, 0, bufferLength)
-      firstIndex = input.read4BytesAsInt()
-      eofIndex = input.read4BytesAsInt()
+      eofIndex = readLast4BytesAsInt(); bufferLength -= Int.SIZE_BYTES
+      firstIndex = readLast4BytesAsInt(); bufferLength -= Int.SIZE_BYTES
       calculateCharsCount()
       calculateBWTReverseVector()
       decodeWithBWTReverseVector()
     }
     close()
   }
+
+  private fun readLast4BytesAsInt(): Int =
+      buffer.copyOfRange(bufferLength - Int.SIZE_BYTES, bufferLength).toInt()
 
   private fun calculateCharsCount() {
     (0..NUMBER_OF_CHARS).forEach { count[it] = 0 }

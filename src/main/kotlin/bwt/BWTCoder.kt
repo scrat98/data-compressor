@@ -10,7 +10,7 @@ import java.lang.Integer.min
 /*
   It uses EOF(character, which is lexicographically bigger than any other character in the input stream) for O(n) time complexity
   Data format:
-  bytes_size | ...data... | first_index | eof_index
+  ...data... | first_index | eof_index
  */
 
 object BWTCoder : Coder {
@@ -57,7 +57,6 @@ private class BWTCoderWriter(
     while (true) {
       bufferLength = input.read(buffer)
       if (bufferLength == -1) break
-      output.writeIntAs4Bytes(bufferLength + 1)
 
       (0..bufferLength).forEach { suffixArray[it] = it }
       suffixArray.sortWith(suffixComparator, 0, bufferLength + 1)
