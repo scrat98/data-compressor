@@ -18,7 +18,7 @@ private class MTFCoderWriter(
   private val output: OutputStream
 ) : CoderWriter {
 
-  private val indexToByte = Array<Int>(NUMBER_OF_CHARS) { it }
+  private val indexToByte = IntArray(NUMBER_OF_CHARS) { it }
 
   override fun writeEncoded() {
     input.forEachByte { byte ->
