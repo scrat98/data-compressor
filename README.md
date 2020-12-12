@@ -39,6 +39,9 @@ firstIndex - это номер исходной строки, eofIndex - инд�
 *Декодирование*:  
 Используется метод вектора обратного преобразования. Работает за линейное время
 
+Улучшения:
+- не хранить bytes length [#b804d614](https://github.com/scrat98/data-compressor/commit/b804d614)
+
 Источники:
 - https://www.youtube.com/watch?v=4n7NPk5lwbI
 - https://www.quora.com/Algorithms/How-can-I-optimize-burrows-wheeler-transform-and-inverse-transform-to-work-in-O-n-time-O-n-space
