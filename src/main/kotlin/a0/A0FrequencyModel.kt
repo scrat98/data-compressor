@@ -4,13 +4,13 @@ import commons.NUMBER_OF_CHARS
 
 internal class A0FrequencyModel {
 
-  private val charToIndex = IntArray(NUMBER_OF_CHARS) { 0 }
+  private val charToIndex = IntArray(NUMBER_OF_CHARS)
 
-  private val indexToChar = IntArray(NUMBER_OF_SYMBOLS + 1) { 0 }
+  private val indexToChar = IntArray(NUMBER_OF_SYMBOLS + 1)
 
-  private val frequencies = IntArray(NUMBER_OF_SYMBOLS + 1) { 0 }
+  private val frequencies = IntArray(NUMBER_OF_SYMBOLS + 1)
 
-  private val cumulative = IntArray(NUMBER_OF_SYMBOLS + 1) { 0 }
+  private val cumulative = IntArray(NUMBER_OF_SYMBOLS + 1)
 
   init {
     (0 until NUMBER_OF_CHARS).forEach {

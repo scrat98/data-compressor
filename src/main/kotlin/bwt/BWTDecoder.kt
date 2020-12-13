@@ -20,9 +20,9 @@ private class BWTDecoderWriter(
 
   private val buffer = ByteArray(BLOCK_SIZE + 1 + 2 * Int.SIZE_BYTES)
 
-  private val BWTReverseVector = IntArray(BLOCK_SIZE + 1) { 0 }
+  private val BWTReverseVector = IntArray(BLOCK_SIZE + 1)
 
-  private val count = IntArray(NUMBER_OF_CHARS + 1) { 0 }
+  private val count = IntArray(NUMBER_OF_CHARS + 1)
 
   private var bufferLength = -1
 
