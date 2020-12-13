@@ -83,7 +83,6 @@ firstIndex - это номер исходной строки, eofIndex - инд�
 - Оптимизировать BWT и строить массив суффиксов за O(n), а не за O(n^2*log n) https://en.wikipedia.org/wiki/Suffix_array
 - Можно в алгоритме BWT схлопывать 4ки букв в 32bit число. или 8ки букв в 64bit число. тем самым мы ускорим сортировку. Но это только в теории, на практике непонятно.
 https://www.hindawi.com/journals/js/2018/6908760/
-- Использовать Linked List в MTF
 
 # Performance test results
 For tests we are going to use [Calgary group dataset](http://www.data-compression.info/Corpora/CalgaryCorpus/)
