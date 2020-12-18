@@ -2,10 +2,10 @@ package bwt
 
 import commons.Coder
 import commons.CoderWriter
+import commons.NUMBER_OF_CHARS
 import commons.writeIntAs4Bytes
 import java.io.InputStream
 import java.io.OutputStream
-import java.lang.Integer.min
 
 /*
   It uses EOF(character, which is lexicographically bigger than any other character in the input stream) for O(n) time complexity
@@ -28,38 +28,26 @@ private class BWTCoderWriter(
 
   private var bufferLength = -1
 
-  private val suffixArray = Array<Int>(BLOCK_SIZE + 1) { 0 }
+  // suffix array related
+  // hold this variables here for better performance
+  private var currentSuffixLength = 0
 
-  private val suffixComparator = Comparator<Int> { i1, i2 ->
-    val l1 = bufferLength - i1
-    val l2 = bufferLength - i2
-    val suffixCmpResult = compareSuffixes(i1, i2, min(l1, l2))
-    if (suffixCmpResult == 0) {
-      l2 - l1
-    }
-    suffixCmpResult
-  }
+  private val suffixArray = IntArray(BLOCK_SIZE + 1)
 
-  private fun compareSuffixes(suffixInd1: Int, suffixInd2: Int, length: Int): Int {
-    var result = 0
-    for (i in 0 until length) {
-      val byte1 = buffer[suffixInd1 + i]
-      val byte2 = buffer[suffixInd2 + i]
-      if (byte1 != byte2) {
-        result = byte1 - byte2
-        break
-      }
-    }
-    return result
-  }
+  private var rank = IntArray(BLOCK_SIZE + 1)
+
+  private var tempArray = IntArray(BLOCK_SIZE + 1)
+
+  private var lastRank = 0
+
+  private var count = IntArray(BLOCK_SIZE + 1)
 
   override fun writeEncoded() {
     while (true) {
       bufferLength = input.read(buffer)
       if (bufferLength == -1) break
 
-      (0..bufferLength).forEach { suffixArray[it] = it }
-      suffixArray.sortWith(suffixComparator, 0, bufferLength + 1)
+      rebuildSuffixArray()
 
       var firstIndex = -1
       var eofIndex = -1
@@ -78,6 +66,65 @@ private class BWTCoderWriter(
       output.writeIntAs4Bytes(eofIndex)
     }
     close()
+  }
+
+  private fun rebuildSuffixArray() {
+    initSuffixArray()
+    val n = bufferLength + 1
+    while (currentSuffixLength < n) {
+      sortSuffixArray()
+      updateSuffixRanks()
+      if (lastRank == bufferLength) break
+      currentSuffixLength *= 2
+    }
+  }
+
+  private fun initSuffixArray() {
+    currentSuffixLength = 1
+    lastRank = NUMBER_OF_CHARS
+    (0..bufferLength).forEach {
+      suffixArray[it] = it
+      if (it == bufferLength) {
+        rank[it] = NUMBER_OF_CHARS
+      } else {
+        rank[it] = buffer[it].toInt() - Byte.MIN_VALUE
+      }
+    }
+  }
+
+  private fun sortSuffixArray() {
+    (0..lastRank).forEach { count[it] = 0 }
+    (0..bufferLength).forEach {
+      tempArray[it] = suffixArray[it] - currentSuffixLength / 2
+      if (tempArray[it] < 0) {
+        tempArray[it] += bufferLength + 1
+      }
+    }
+    (0..bufferLength).forEach { count[rank[tempArray[it]]]++ }
+    (1..lastRank).forEach { count[it] += count[it - 1] }
+    (bufferLength downTo 0).forEach {
+      suffixArray[--count[rank[tempArray[it]]]] = tempArray[it]
+    }
+  }
+
+  private fun updateSuffixRanks() {
+    var currentRank = 0
+    tempArray[suffixArray[0]] = currentRank
+    (1..bufferLength).forEach {
+      val (iPrefixRank, iPostfixRank) = getPrefixAndPostfixRanksForSuffix(suffixArray[it])
+      val (jPrefixRank, jPostfixRank) = getPrefixAndPostfixRanksForSuffix(suffixArray[it - 1])
+      if (iPrefixRank != jPrefixRank || iPostfixRank != jPostfixRank) {
+        currentRank++
+      }
+      tempArray[suffixArray[it]] = currentRank
+    }
+    rank = tempArray.also { tempArray = rank }
+    lastRank = currentRank
+  }
+
+  private fun getPrefixAndPostfixRanksForSuffix(i: Int): Pair<Int, Int> {
+    val postfixIndex = (i + currentSuffixLength / 2) % (bufferLength + 1)
+    return (i to postfixIndex).let { rank[it.first] to rank[it.second] }
   }
 
   override fun close() {
