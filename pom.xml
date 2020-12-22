@@ -19,6 +19,12 @@
     </properties>
 
     <dependencies>
+        <!-- Jpeg utils -->
+        <dependency>
+            <groupId>com.davidjohnburrowes</groupId>
+            <artifactId>jpegfile</artifactId>
+            <version>1.0.0</version>
+        </dependency>
         <!-- Kotlin -->
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
