@@ -1,6 +1,5 @@
 package jpeg
 
-import commons.Compressor
 import commons.decode
 import commons.encode
 import org.junit.jupiter.api.Assertions.assertArrayEquals
@@ -11,7 +10,7 @@ import java.io.File
 import java.util.stream.Stream
 
 abstract class AbstractJpegCompressorTest(
-  private val jpegCompressor: Compressor
+  private val jpegCompressor: JpegCompressor
 ) {
 
   @TestFactory

@@ -3,13 +3,13 @@ package jpeg.simple
 import DataCompressor
 import com.davidjohnburrowes.format.jpeg.JpegData
 import com.davidjohnburrowes.format.jpeg.data.EntropyData
-import commons.Compressor
 import commons.decode
 import commons.encode
+import jpeg.JpegCompressor
 import java.io.InputStream
 import java.io.OutputStream
 
-object SimpleJpegCompressor : Compressor {
+object SimpleJpegCompressor : JpegCompressor {
   override fun encode(input: InputStream, output: OutputStream) {
     val jpegData = JpegData()
     jpegData.read(input)
