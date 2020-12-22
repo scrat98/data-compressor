@@ -1,5 +1,6 @@
 package a0
 
+import commons.BitInputStream
 import commons.Decoder
 import commons.DecoderWriter
 import java.io.InputStream

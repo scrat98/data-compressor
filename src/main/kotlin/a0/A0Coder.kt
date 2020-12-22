@@ -1,5 +1,6 @@
 package a0
 
+import commons.BitOutputStream
 import commons.Coder
 import commons.CoderWriter
 import commons.forEachByte
