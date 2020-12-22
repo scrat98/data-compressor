@@ -33,7 +33,7 @@ abstract class AbstractJpegCompressorTest(
 
 internal fun getAllJpegs(): Map<String, List<File>> {
   val jpegFolderResource =
-      Thread.currentThread().contextClassLoader.getResource("jpeg")
+      Thread.currentThread().contextClassLoader.getResource("jpeg-images")
   val qualityFolder = File(jpegFolderResource.file)
   return qualityFolder.listFiles()
       .filter { it.isDirectory }

@@ -4,8 +4,13 @@ import java.io.Closeable
 import java.io.OutputStream
 
 internal class BitOutputStream(
-  private val output: OutputStream
+  private val output: OutputStream,
+  private val bitToFill: Int = 0,
 ) : Closeable {
+
+  init {
+    require(bitToFill == 0 || bitToFill == 1) { "bitToFill must be 0 or 1" }
+  }
 
   private var currentByte = 0
 
@@ -23,7 +28,7 @@ internal class BitOutputStream(
   }
 
   override fun close() {
-    while (numBitsFilled != 0) write(0)
+    while (numBitsFilled != 0) write(bitToFill)
     output.close()
   }
 }

@@ -1,0 +1,5 @@
+package jpeg.entropy.coding
+
+import jpeg.transcoder.entropy.coding.huffman.HuffmanJpegEntropyCompressor
+
+class HuffmanJpegEntropyCodingTest : AbstractJpegEntropyCodingTest(HuffmanJpegEntropyCompressor)

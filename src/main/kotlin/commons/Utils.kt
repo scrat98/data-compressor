@@ -41,3 +41,10 @@ internal fun InputStream.read4BytesAsInt(): Int {
 internal fun OutputStream.writeIntAs4Bytes(number: Int) {
   this.write(number.toBytes())
 }
+
+internal fun Int.asBitsString(length: Int): String = this.toString(2).padStart(length, '0')
+
+internal fun String.asBits(): List<Int> = this.map { if (it == '0') 0 else 1 }
+
+internal fun List<Int>.bitsToInt() =
+    this.map { if (it == 0) '0' else '1' }.joinToString("").toInt(2)
