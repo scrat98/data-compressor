@@ -1,0 +1,5 @@
+package jpeg
+
+import jpeg.transcoder.JpegTranscoderCompressor
+
+class JpegTranscoderCompressorTest : AbstractJpegCompressorTest(JpegTranscoderCompressor)
