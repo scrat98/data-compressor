@@ -118,7 +118,7 @@
                 <version>3.3.0</version>
                 <executions>
                     <execution>
-                        <id>make-assembly</id>
+                        <id>build-data-compressor</id>
                         <phase>package</phase>
                         <goals>
                             <goal>single</goal>
@@ -132,6 +132,25 @@
                             <descriptorRefs>
                                 <descriptorRef>jar-with-dependencies</descriptorRef>
                             </descriptorRefs>
+                            <finalName>data-compressor</finalName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>build-jpeg-compressor</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <archive>
+                                <manifest>
+                                    <mainClass>jpeg.MainKt</mainClass>
+                                </manifest>
+                            </archive>
+                            <descriptorRefs>
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
+                            </descriptorRefs>
+                            <finalName>jpeg-compressor</finalName>
                         </configuration>
                     </execution>
                 </executions>
