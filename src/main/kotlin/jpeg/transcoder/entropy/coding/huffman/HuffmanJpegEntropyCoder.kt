@@ -71,5 +71,7 @@ private class HuffmanJpegEntropyCoderWriter(
     bitOutputStream.close()
     entropyData.data = encoded.toByteArray()
     jpegData.write(output)
+    input.close()
+    output.close()
   }
 }
