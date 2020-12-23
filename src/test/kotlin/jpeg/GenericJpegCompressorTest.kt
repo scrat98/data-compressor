@@ -1,0 +1,3 @@
+package jpeg
+
+class GenericJpegCompressorTest : AbstractJpegCompressorTest(GenericJpegCompressor)

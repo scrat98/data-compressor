@@ -1,7 +1,11 @@
 package jpeg
 
 import DataCompressor
+import a0.A0Compressor
+import bwt.BWTCompressor
 import commons.Compressor
+import mtf.MTFCompressor
+import rle.RLECompressor
 import java.io.InputStream
 import java.io.OutputStream
 
@@ -22,11 +26,15 @@ object NoneJpegCompressor : JpegCompressor {
 }
 
 object BaseJpegCompressor : JpegCompressor {
+
+  private val bestCompressorChain =
+      listOf(BWTCompressor, MTFCompressor, RLECompressor, A0Compressor)
+
   override fun encode(input: InputStream, output: OutputStream) {
-    DataCompressor.encode(input, output)
+    DataCompressor.encode(bestCompressorChain, input, output)
   }
 
   override fun decode(input: InputStream, output: OutputStream) {
-    DataCompressor.decode(input, output)
+    DataCompressor.decode(bestCompressorChain, input, output)
   }
 }
