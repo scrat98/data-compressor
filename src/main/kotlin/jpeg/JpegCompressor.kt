@@ -10,10 +10,14 @@ interface JpegCompressor : Compressor
 object NoneJpegCompressor : JpegCompressor {
   override fun encode(input: InputStream, output: OutputStream) {
     output.write(input.readBytes())
+    input.close()
+    output.close()
   }
 
   override fun decode(input: InputStream, output: OutputStream) {
     output.write(input.readBytes())
+    input.close()
+    output.close()
   }
 }
 
