@@ -14,8 +14,15 @@ interface Coder {
 }
 
 fun Coder.encode(input: ByteArray): ByteArray {
-  val inputStream = input.inputStream()
+  return encode(input.inputStream())
+}
+
+fun Coder.encode(input: InputStream): ByteArray {
   val outputStream = ByteArrayOutputStream()
-  this.encode(inputStream, outputStream)
+  this.encode(input, outputStream)
   return outputStream.toByteArray()
+}
+
+fun Coder.encode(input: ByteArray, output: OutputStream) {
+  this.encode(input.inputStream(), output)
 }
