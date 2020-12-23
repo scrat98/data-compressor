@@ -19,6 +19,8 @@ object SimpleJpegCompressor : JpegCompressor {
       it.data = encoded
     }
     jpegData.write(output)
+    input.close()
+    output.close()
   }
 
   override fun decode(input: InputStream, output: OutputStream) {
@@ -30,5 +32,7 @@ object SimpleJpegCompressor : JpegCompressor {
       it.data = decoded
     }
     jpegData.write(output)
+    input.close()
+    output.close()
   }
 }
