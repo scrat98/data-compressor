@@ -32,7 +32,12 @@ private class A0DecoderWriter(
   }
 
   private fun moveToTheNextBit() {
-    codeValue = 2 * codeValue + bitInputStream.read()
+    val nextBit = bitInputStream.read()
+    if (nextBit == -1) {
+      codeValue = 2 * codeValue
+    } else {
+      codeValue = 2 * codeValue + nextBit
+    }
   }
 
   override fun writeDecoded() {
